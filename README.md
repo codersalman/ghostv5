@@ -7,7 +7,10 @@ This example deploys self-hosted version of [Ghost](https://ghost.org/). Interna
 ## ✨ Features
 
 - Ghost
-- MySQL
+- Sqlite
+- Google Cloud Storage Bucket
+- AWS S3 
+- Cloudinary
 
 ## 💁‍♀️ How to use
 
