@@ -1,0 +1,14 @@
+{
+  "name": "ghostv5",
+  "version": "1.0.0",
+  "description": "Ghost v5 CMS on Railway with S3, GCP ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ghost"
+  ],
+  "author": "codersalman",
+  "license": "MIT"
+}
