@@ -1,14 +1,34 @@
 {
-  "name": "ghostv5",
-  "version": "1.0.0",
-  "description": "Ghost v5 CMS on Railway with S3, GCP ",
+  "name": "ghost",
+  "version": "5.0.0",
+  "description": "Deploy Ghost v5 CMS on Railway with S3 and GCP ",
   "main": "index.js",
+  "engines": {
+    "node": "16.X"
+  },
+  "dependencies": {
+    "casper": "github:TryGhost/Casper#main",
+    "ghost": "5.0.0",
+    "ghost-storage-cloudinary": "2.2.1",
+    "ghost-storage-adapter-s3": "^2.8.0",
+    "ghost-google-cloud-storage": "^1.1.2",
+    "sqlite3": "5.0.11"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "bin/create-config && node index.js",
+    "postinstall": "bin/cloudinary.sh &&  bash bin/aws_s3.sh && bash bin/gcp.sh && bash bin/themes.sh"
   },
   "keywords": [
     "ghost"
   ],
   "author": "codersalman",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codersalman/ghostv5.git"
+  },
+  "bugs": {
+    "url": "https://github.com/codersalman/ghostv5/issues"
+  },
+  "homepage": "https://github.com/codersalman/ghostv5#readme"
 }

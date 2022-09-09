@@ -1,0 +1,107 @@
+#!/usr/bin/env node
+
+/*
+  This file creates and writes our production config after the build has been completed.
+  Make changes here if you want to use a different image storage service or email provider.
+*/
+
+var fs = require("fs");
+var path = require("path");
+
+var appRoot = path.join(__dirname, "..");
+var contentPath = path.join(appRoot, "/content/");
+var gcpkey = path.join(contentPath,"gcpkey.json")
+function createConfig() {
+  var fileStorage, storage;
+
+  if (process.env.GCP_PROJECTID) {
+    fileStorage = true;
+    storage = {
+      active: "gcloud",
+      gcloud: {
+        projectId: process.env.GCP_PROJECTID,
+        key: gcpkey,
+        bucket: process.env.GCP_BUCKET_NAME,
+        assetDomain: process.env.GCP_ASSET_DOMAIN,
+        insecure: true,
+        maxAge:2678400,
+      },
+    };
+  } else if (process.env.S3_ACCESS_KEY_ID) {
+    fileStorage = true;
+    storage = {
+      active: "s3",
+      s3: {
+        accessKeyId: process.env.S3_ACCESS_KEY_ID,
+        secretAccessKey: process.env.S3_ACCESS_SECRET_KEY,
+        bucket: process.env.S3_BUCKET_NAME,
+        region: process.env.S3_BUCKET_REGION,
+        assetHost: process.env.S3_ASSET_HOST_URL,
+      },
+    };
+  } else if (process.env.CLOUDINARY_URL) {
+    console.log("CLOUDINARY_URL found, setting storage to cloudinary");
+    fileStorage = true;
+    storage = {
+      active: "cloudinary",
+      cloudinary: {
+        useDatedFolder: false,
+        upload: {
+          use_filename: true,
+          unique_filename: false,
+          overwrite: false,
+          folder: "ghost-blog-images",
+          tags: ["blog"],
+        },
+        fetch: {
+          quality: "auto",
+          secure: true,
+          cdn_subdomain: true,
+        },
+      },
+    };
+  } else {
+    console.log("CLOUDINARY_URL not found, setting storage to false");
+    fileStorage = false;
+    storage = {};
+  }
+
+  config = {
+    url: process.env.BLOG_URL,
+    logging: {
+      level: "info",
+      transports: ["stdout"],
+    },
+    mail: {
+      transport: "SMTP",
+      options: {
+        service: "Mailgun",
+        auth: {
+          user: process.env.MAILGUN_SMTP_LOGIN,
+          pass: process.env.MAILGUN_SMTP_PASSWORD,
+        },
+      },
+    },
+    fileStorage: fileStorage,
+    storage: storage,
+    database: {
+      client: "sqlite3",
+      connection: {
+        filename: "content/data/ghost-test.db",
+      },
+    },
+    server: {
+      host: "0.0.0.0",
+      port: process.env.PORT,
+    },
+    paths: {
+      contentPath: contentPath,
+    },
+  };
+
+  return config;
+}
+
+var configContents = JSON.stringify(createConfig(), null, 2);
+fs.writeFileSync(path.join(appRoot, "config.production.json"), configContents);
+fs.mkdirSync(path.join(contentPath, "/data/"), { recursive: true });
