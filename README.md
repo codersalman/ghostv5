@@ -2,14 +2,13 @@
 
 This example deploys self-hosted version of [Ghost](https://ghost.org/). Internally it uses a MySQL database to store the data.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/ghost)
-
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/5rOimm?referralCode=R4xfhi)
 ## ✨ Features
 
 - Ghost
 - Sqlite
 - Google Cloud Storage Bucket
-- AWS S3 
+- AWS S3
 - Cloudinary
 
 ## 💁‍♀️ How to use
